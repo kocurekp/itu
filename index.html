@@ -130,7 +130,7 @@
 					$("#message").text(strMessage);
 					$("#form_add")[0].reset();
 					load_data();
-					$("#div_add").hide();
+					// $("#div_add").hide();
 				}
 			});
 		}
@@ -139,6 +139,7 @@
 			e.preventDefault();
 			if ($(edit_ID).is(":visible")) {
 				edit();
+				hide_edit();
 			}else{
 				$.ajax( {
 					url: "insert.php",
@@ -204,7 +205,14 @@
 				load_edit();
 			}
 		});
-
+		function hide_edit(){
+			$("#div_add").hide();
+			$("#edit").show();
+			$("#hide").hide();
+			$("#edit_send").hide();
+			$("#show").show();
+			$("#edit_ID").hide();
+		}
 		$("#show").click(function(){
 			$("#div_add").show();
 			$("#show").hide();
@@ -235,12 +243,7 @@
 			load_edit();
 		})
 		$("#hide").click(function(){
-			$("#div_add").hide();
-			$("#edit").show();
-			$("#hide").hide();
-			$("#edit_send").hide();
-			$("#show").show();
-			$("#edit_ID").hide();
+			hide_edit();
 		})  
 	});
 
