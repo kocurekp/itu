@@ -30,11 +30,11 @@
 			<div id="div_add" style="display: none;">
 			</div>
 		</form>
-		<form method="post" action="" id=myForm>
+		<form method="post" action="" id="myForm" >
 			<div id="result"></div>
 			<label for="checkAll">Vybrat vše</label>
 			<input type="checkbox" style="  position: relative;display: block;width: 90px;height: 20px;margin: 0 left;background: #FFF;border: 1px solid #2E2E2E;border-radius: 2px;-webkit-border-radius: 2px;-moz-border-radius: 2px;" id="checkAll" name="myCheckboxes[]" >
-			<input id="submit" class="btn btn-danger pull-right" type="submit" name="submit" value="Odstranit" />
+			<input id="submit" class="btn btn-danger pull-right" type="submit" name="submit" value="Odstranit"  />
 		</div>
 	</form>
 
@@ -44,6 +44,7 @@
 
 <script type="text/javascript">
 
+	//add product pressed
 	function load_add(){
 		$.ajax({
 			url:"add.php",
@@ -64,6 +65,7 @@
 		});
 	}
 
+	//block enter key
 	function stopRKey(evt) {
 		var evt = (evt) ? evt : ((event) ? event : null);
 		var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
@@ -72,10 +74,12 @@
 
 	document.onkeypress = stopRKey;
 
+	//check checkboxes
 	$('#checkAll').click(function () {    
 		$('input:checkbox').prop('checked', this.checked);    
 	});
 
+	//new type
 	$(document).ready(function(){
 		$("#add_type").click(function(){
 			$("#type").hide();
@@ -88,6 +92,7 @@
 			});
 		})
 
+		//new location
 		$("#add_location").click(function(){
 			$("#location").hide();
 			$.ajax({
@@ -100,26 +105,30 @@
 		})
 	})
 
+	//delete selected
 	$(document).ready(function(){
 		$("form#myForm").submit(function() {
 			var myCheckboxes = new Array();
 			$("input:checked").each(function() {
 				myCheckboxes.push($(this).val());
 			});
-			$.ajax({
-				type: "post",
-				url: "delete.php",
-				dataType: 'text',
-				data: '&myCheckboxes='+myCheckboxes,
-				success: function(strMessage) {
-					$("#message").text(strMessage);
-					$("#form_add")[0].reset();
-					load_data();
-				}
-			});
+			if (confirm('Opravdu chcete odstranit vybrané záznamy?')) {
+				$.ajax({
+					type: "post",
+					url: "delete.php",
+					dataType: 'text',
+					data: '&myCheckboxes='+myCheckboxes,
+					success: function(strMessage) {
+						$("#message").text(strMessage);
+						$("#form_add")[0].reset();
+						load_data();
+					}
+				});
+			}
 
 		});
 
+		//edit product
 		function edit(){
 			$.ajax( {
 				url: "edit_product.php",
@@ -135,6 +144,7 @@
 			});
 		}
 
+		//add product
 		$("#form_add").submit(function(e) {
 			e.preventDefault();
 			if ($(edit_ID).is(":visible")) {
@@ -157,6 +167,7 @@
 
 		load_data();
 
+		//load products from database
 		function load_data(query)
 		{
 			$.ajax({
@@ -169,6 +180,7 @@
 				}
 			});
 		}
+		//load again when key is pressed in search bar
 		$('#search_text').keyup(function(){
 			var search = $(this).val();
 			if(search != '')
@@ -181,6 +193,7 @@
 			}
 		});
 
+		//load data to be edited
 		function load_edit_data(query)
 		{
 			$.ajax({
@@ -205,46 +218,46 @@
 				load_edit();
 			}
 		});
-		function hide_edit(){
-			$("#div_add").hide();
-			$("#edit").show();
-			$("#hide").hide();
-			$("#edit_send").hide();
-			$("#show").show();
-			$("#edit_ID").hide();
-		}
-		$("#show").click(function(){
-			$("#div_add").show();
-			$("#show").hide();
-			$("#hide").show();
-			$("#add").show();
-			$("#add_type").show();
-			$("#add_location").show();
-			$("#edit").hide();
-			load_add();
-		})
-		$("#hide").click(function(){
-			$("#div_add").hide();
-			$("#show").show();
-			$("#hide").hide();
-			$("#add").hide();
-			$("#add_type").hide();
-			$("#add_location").hide();
-			$("#edit").show();
-		})
+			function hide_edit(){
+				$("#div_add").hide();
+				$("#edit").show();
+				$("#hide").hide();
+				$("#edit_send").hide();
+				$("#show").show();
+				$("#edit_ID").hide();
+			}
+			$("#show").click(function(){
+				$("#div_add").show();
+				$("#show").hide();
+				$("#hide").show();
+				$("#add").show();
+				$("#add_type").show();
+				$("#add_location").show();
+				$("#edit").hide();
+				load_add();
+			})
+			$("#hide").click(function(){
+				$("#div_add").hide();
+				$("#show").show();
+				$("#hide").hide();
+				$("#add").hide();
+				$("#add_type").hide();
+				$("#add_location").hide();
+				$("#edit").show();
+			})
 
-		$("#edit").click(function(){
-			$("#div_add").show();
-			$("#edit").hide();
-			$("#hide").show();
-			$("#edit_send").show();
-			$("#show").hide();
-			$("#edit_ID").show();
-			load_edit();
-		})
-		$("#hide").click(function(){
-			hide_edit();
-		})  
+			$("#edit").click(function(){
+				$("#div_add").show();
+				$("#edit").hide();
+				$("#hide").show();
+				$("#edit_send").show();
+				$("#show").hide();
+				$("#edit_ID").show();
+				load_edit();
+			})
+			$("#hide").click(function(){
+				hide_edit();
+			})  
 	});
 
 </script>
